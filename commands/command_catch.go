@@ -15,6 +15,12 @@ func commandCatch(cfg *pokeapi.Config, args ...string) error {
 	}
 
 	pokemonName := args[0]
+
+	if _, inPokedex := cfg.Pokedex[pokemonName]; inPokedex {
+		fmt.Printf("%s is already in your pokedex \n", pokemonName)
+		return nil
+	}
+
 	url := pokeapi.BaseURL + "/pokemon/" + pokemonName
 	
 	
