@@ -4,10 +4,17 @@ import (
 	"fmt"
 
 	"github.com/levabu/pokedexcli/internal/pokeapi"
+	"github.com/levabu/pokedexcli/internal/pokecache"
 )
 
 func commandMap(cfg *pokeapi.Config) error {
-	return _baseMap(cfg.NextLocationsURL, cfg)
+	var url string
+	if cfg.NextLocationsURL == nil {
+		url = pokeapi.BaseURL + "/location-area"
+	} else {
+		url = *cfg.NextLocationsURL
+	}
+	return _baseMap(url, cfg)
 }
 
 func commandMapBack(cfg *pokeapi.Config) error {
@@ -15,21 +22,35 @@ func commandMapBack(cfg *pokeapi.Config) error {
 		fmt.Println("you're on the first page")
 		return nil
 	}
-	return _baseMap(cfg.PreviousLocationsURL, cfg)
+	url := *cfg.PreviousLocationsURL
+	return _baseMap(url, cfg)
 }
 
-func _baseMap(url *string, cfg *pokeapi.Config) error {
-	locations, err := cfg.PokeClient.ListLocations(url)
-	if err != nil {
-		return err
+func _baseMap(url string, cfg *pokeapi.Config) error {
+	var locations pokeapi.RespLocations
+	entry, isFound := cfg.PokeCache.Get(url)
+	var err error
+	if isFound {
+		err = pokecache.ConvertCacheEntry(entry, &locations)
+		if err != nil {
+			return err
+		}
+	} else {
+		locations, err = cfg.PokeClient.ListLocations(url, cfg)
+		if err != nil {
+			return err
+		}
 	}
 
-	cfg.PreviousLocationsURL = locations.Previous
-	cfg.NextLocationsURL = locations.Next
+	processLocations(&locations, cfg)
+	return nil
+}
 
+func processLocations(locations *pokeapi.RespLocations, cfg *pokeapi.Config) {
 	for _, res := range locations.Results {
 		fmt.Println(res.Name)
 	}
 
-	return nil
+	cfg.PreviousLocationsURL = locations.Previous
+	cfg.NextLocationsURL = locations.Next
 }
