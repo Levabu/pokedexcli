@@ -13,4 +13,5 @@ type Config struct {
 	PreviousLocationsURL *string
 	NextLocationsURL     *string
 	PokeCache            pokecache.Cache
+	Pokedex map[string]Pokemon
 }

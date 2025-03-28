@@ -13,7 +13,7 @@ func commandExplore(cfg *pokeapi.Config, args ...string) error {
 	}
 
 	locationArea := args[0]
-	url := "https://pokeapi.co/api/v2/location-area/" + locationArea
+	url := pokeapi.BaseURL + "/location-area/" + locationArea
 	
 	
 	fmt.Printf("Exploring %s...\n", locationArea)
