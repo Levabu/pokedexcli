@@ -7,7 +7,7 @@ import (
 	"github.com/levabu/pokedexcli/internal/pokeapi"
 )
 
-func commandExit(cfg *pokeapi.Config) error {
+func commandExit(cfg *pokeapi.Config, args ...string) error {
 	fmt.Println("Closing the Pokedex... Goodbye!")
 	os.Exit(0)
 	return nil

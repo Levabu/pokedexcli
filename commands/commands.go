@@ -7,7 +7,7 @@ import (
 type CliCommand struct {
 	Name        string
 	Description string
-	Callback    func(*pokeapi.Config) error
+	Callback    func(*pokeapi.Config, ...string) error
 }
 
 func GetCommands() map[string]CliCommand {
@@ -26,6 +26,11 @@ func GetCommands() map[string]CliCommand {
 			Name:        "mapb",
 			Description: "Displays the previous 20 names of location areas in the Pokemon world",
 			Callback:    commandMapBack,
+		},
+		"explore": {
+			Name: "explore",
+			Description: "Displays the names of the pokemons found in a given location area",
+			Callback: commandExplore,
 		},
 		"exit": {
 			Name:        "exit",

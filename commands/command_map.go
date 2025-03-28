@@ -7,7 +7,7 @@ import (
 	"github.com/levabu/pokedexcli/internal/pokecache"
 )
 
-func commandMap(cfg *pokeapi.Config) error {
+func commandMap(cfg *pokeapi.Config, args ...string) error {
 	var url string
 	if cfg.NextLocationsURL == nil {
 		url = pokeapi.BaseURL + "/location-area"
@@ -17,7 +17,7 @@ func commandMap(cfg *pokeapi.Config) error {
 	return _baseMap(url, cfg)
 }
 
-func commandMapBack(cfg *pokeapi.Config) error {
+func commandMapBack(cfg *pokeapi.Config, args ...string) error {
 	if cfg.PreviousLocationsURL == nil {
 		fmt.Println("you're on the first page")
 		return nil

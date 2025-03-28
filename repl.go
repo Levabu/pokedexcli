@@ -37,7 +37,7 @@ func startRepl(cfg *pokeapi.Config) {
 			continue
 		}
 		
-		if err := c.Callback(cfg); err != nil {
+		if err := c.Callback(cfg, tokens[1:]...); err != nil {
 			fmt.Printf("%v\n", err)
 		}
 	}

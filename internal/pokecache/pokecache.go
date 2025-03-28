@@ -47,12 +47,8 @@ func ConvertCacheEntry[T any](val []byte, data *T) (error) {
 func (c *Cache) reapLoop(interval time.Duration) {
 	ticker := time.NewTicker(interval)
 	defer ticker.Stop()
-	start := time.Now()
 		
 	for t := range ticker.C {
-		now := time.Now()
-		fmt.Printf("%v have passed\n", now.Sub(start))
-		start = now
 		c.mu.Lock()
 		for key, entry := range c.data {
 			if t.Sub(entry.createdAt) >= interval {
